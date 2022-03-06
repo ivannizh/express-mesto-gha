@@ -17,9 +17,13 @@ function createCard(req, res) {
 }
 
 function deleteCard(req, res) {
-  Card.findOneAndRemove(req.params.cardId).then(() => {
-    res.sendStatus(200);
-  });
+  Card.findOneAndRemove(req.params.cardId).then((card) => {
+    if (card) {
+      res.status(200).send({message: 'deleted'});
+    } else {
+      res.status(404).send({message: 'Card not found'});
+    }
+  }).catch((err) => res.status(400).send({message: err.message}));
 }
 
 function likeCard(req, res) {
@@ -31,7 +35,7 @@ function likeCard(req, res) {
     if (card) {
       res.send({card});
     } else {
-      res.status(404).send({mesage: 'Card not found'});
+      res.status(404).send({message: 'Card not found'});
     }
   })
     .catch((err) => res.status(400).send({ message: `${err}` }));
@@ -46,7 +50,7 @@ function dislikeCard(req, res) { //  — убрать лайк с карточк
     if (card) {
     res.send({ card });
   } else {
-    res.status(404).send({mesage: 'Card not found'});
+    res.status(404).send({message: 'Card not found'});
   }
   })
     .catch((err) => res.status(400).send({ message: `${err}` }));
