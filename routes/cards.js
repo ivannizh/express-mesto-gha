@@ -11,9 +11,9 @@ function getCards(req, res) {
 function createCard(req, res) {
   const { name, link } = req.body;
 
-  Card.create({ name, link, owner: req.user._id }).then(() => {
-    res.sendStatus(200);
-  });
+  Card.create({ name, link, owner: req.user._id }).then((card) => {
+    res.send(card);
+  }).catch((err) => res.status(400).send({message: err.message}));
 }
 
 function deleteCard(req, res) {
