@@ -3,7 +3,9 @@ const User = require('../models/user');
 function createUser(req, res) {
   const { name, about, avatar } = req.body;
 
-  User.create({ name, about, avatar }).then(() => { res.sendStatus(200); });
+  User.create({ name, about, avatar })
+    .then((user) => { res.status(200).send(user); })
+    .catch((err) => { res.status(400).send({ message: err.message }); });
 }
 
 function getUsers(req, res) {
