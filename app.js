@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const router = require('./router');
+const routerCard = require('./routes/cards');
+const routerUser = require('./routes/users');
 
 const { PORT = 3000 } = process.env;
 
@@ -27,7 +28,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', router);
+app.use(routerUser);
+app.use(routerCard);
 
 app.use((req, res) => {
   res.status(404);
