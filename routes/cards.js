@@ -21,7 +21,7 @@ function deleteCard(req, res) {
     if (card) {
       res.status(200).send({message: 'deleted'});
     } else {
-      res.status(404).send({message: 'Card not found'});
+      res.status(400).send({message: 'Card not found'});
     }
   }).catch((err) => res.status(400).send({message: err.message}));
 }
