@@ -28,8 +28,13 @@ function likeCard(req, res) {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   ).then((card) => {
-    res.send({ card });
-  });
+    if (card) {
+      res.send({card});
+    } else {
+      res.status(404).send({mesage: 'Card not found'});
+    }
+  })
+    .catch((err) => res.status(400).send({ message: `${err}` }));
 }
 
 function dislikeCard(req, res) { //  — убрать лайк с карточки
@@ -38,8 +43,13 @@ function dislikeCard(req, res) { //  — убрать лайк с карточк
     { pull: { likes: req.user._id } },
     { new: true },
   ).then((card) => {
+    if (card) {
     res.send({ card });
-  });
+  } else {
+    res.status(404).send({mesage: 'Card not found'});
+  }
+  })
+    .catch((err) => res.status(400).send({ message: `${err}` }));
 }
 
 module.exports = {
