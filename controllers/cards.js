@@ -18,7 +18,6 @@ function createCard(req, res) {
 
 function deleteCard(req, res) {
   Card.findByIdAndRemove(req.params.cardId).then((card) => {
-    console.log(req.params.cardId);
     if (card) {
       res.status(200).send({ message: 'deleted' });
     } else {
