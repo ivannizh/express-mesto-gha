@@ -8,7 +8,11 @@ function createUser(req, res) {
       res.status(200).send(user);
     })
     .catch((err) => {
-      res.status(400).send({ message: err.message });
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
     });
 }
 
@@ -27,7 +31,13 @@ function getUserById(req, res) {
         res.status(404).send({ message: 'User not found' });
       }
     })
-    .catch((err) => res.status(400).send({ message: `${err}` }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Невалидный id' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 }
 
 function updateAvatar(req, res) {
@@ -37,7 +47,13 @@ function updateAvatar(req, res) {
     { new: true, runValidators: true },
   )
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: `${err}` }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 }
 
 function updateUser(req, res) {
@@ -47,7 +63,13 @@ function updateUser(req, res) {
     { new: true, runValidators: true },
   )
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(400).send({ message: `${err}` }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Некорректные данные' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 }
 
 module.exports = {

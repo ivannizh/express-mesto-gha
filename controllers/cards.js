@@ -5,7 +5,9 @@ function getCards(req, res) {
     (cards) => {
       res.send({ data: cards });
     },
-  );
+  ).catch((err) => {
+    res.status(500).send({ message: `Произошла ошибка ${err}` });
+  });
 }
 
 function createCard(req, res) {
@@ -13,7 +15,13 @@ function createCard(req, res) {
 
   Card.create({ name, link, owner: req.user._id }).then((card) => {
     res.send(card);
-  }).catch((err) => res.status(400).send({ message: err.message }));
+  }).catch((err) => {
+    if (err.name === 'ValidationError') {
+      res.status(400).send({ message: 'Некорректные данные' });
+    } else {
+      res.status(500).send({ message: `Произошла ошибка ${err}` });
+    }
+  });
 }
 
 function deleteCard(req, res) {
@@ -23,7 +31,13 @@ function deleteCard(req, res) {
     } else {
       res.status(404).send({ message: 'Card not found' });
     }
-  }).catch((err) => res.status(400).send({ message: err.message }));
+  }).catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(400).send({ message: 'Невалидный id' });
+    } else {
+      res.status(500).send({ message: `Произошла ошибка ${err}` });
+    }
+  });
 }
 
 function likeCard(req, res) {
@@ -38,7 +52,13 @@ function likeCard(req, res) {
       res.status(404).send({ message: 'Card not found' });
     }
   })
-    .catch((err) => res.status(400).send({ message: `${err}` }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Невалидный id' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 }
 
 function dislikeCard(req, res) { //  — убрать лайк с карточки
@@ -53,7 +73,13 @@ function dislikeCard(req, res) { //  — убрать лайк с карточк
       res.status(404).send({ message: 'Card not found' });
     }
   })
-    .catch((err) => res.status(400).send({ message: `${err}` }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Невалидный id' });
+      } else {
+        res.status(500).send({ message: `Произошла ошибка ${err}` });
+      }
+    });
 }
 
 module.exports = {
