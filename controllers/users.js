@@ -1,18 +1,62 @@
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 function createUser(req, res) {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  User.create({ name, about, avatar })
+  if (!validator.isEmail(email)) {
+    res.status(400).send({ message: 'Wrong email validation' });
+    return;
+  }
+
+  bcrypt.hash(password, 10).then((hash) => {
+    User.create({
+      name, about, avatar, email, hash,
+    })
+      .then((user) => {
+        res.status(200).send(user);
+      })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          res.status(400).send({ message: 'Некорректные данные' });
+        } else {
+          res.status(500).send({ message: `Произошла ошибка ${err}` });
+        }
+      });
+  });
+}
+
+function login(req, res) {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
     .then((user) => {
-      res.status(200).send(user);
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      res.send({ message: 'Всё верно!' });
+      const token = jwt.sign(
+        { _id: req.user._id },
+        'some-secret-key',
+        { expiresIn: '7d', httpOnly: true },
+      );
+      res.send({ token });
+      return Promise.resolve();
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Некорректные данные' });
-      } else {
-        res.status(500).send({ message: `Произошла ошибка ${err}` });
-      }
+      res
+        .status(401)
+        .send({ message: err.message });
     });
 }
 
@@ -73,5 +117,5 @@ function updateUser(req, res) {
 }
 
 module.exports = {
-  createUser, getUsers, getUserById, updateAvatar, updateUser,
+  createUser, getUsers, getUserById, updateAvatar, updateUser, login,
 };
