@@ -1,8 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const routerCard = require('./routes/cards');
 const routerUser = require('./routes/users');
+const { login, createUser } = require('./controllers/users');
+const { auth } = require('./middlewares/auth');
+const { errorHandler } = require('./middlewares/error-handler');
 
 const { PORT = 3000 } = process.env;
 
@@ -17,19 +21,19 @@ const logger = (req, res, next) => {
 
 const app = express();
 app.use(logger);
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62235773a75d06577f6b7020',
-  };
+app.post('/signin', login);
+app.post('/signup', createUser);
 
-  next();
-});
+app.use(auth);
 
-app.use(routerUser);
-app.use(routerCard);
+app.use('/users', routerUser);
+app.use('/cards', routerCard);
+
+app.use(errorHandler);
 
 app.use((req, res) => {
   res.status(404);
