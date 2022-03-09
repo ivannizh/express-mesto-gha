@@ -20,7 +20,7 @@ function createCard(req, res, next) {
     res.send(card);
   }).catch((err) => {
     if (err.name === 'ValidationError') {
-      next(BadRequestError('Некорректные данные'));
+      next(new BadRequestError('Некорректные данные'));
     } else {
       next(err);
     }
@@ -38,14 +38,14 @@ function deleteCard(req, res, next) {
           next(err);
         });
       } else {
-        next(ForbiddenError('User is not owner'));
+        next(new ForbiddenError('User is not owner'));
       }
     } else {
-      next(NotFoundError('Card not found'));
+      next(new NotFoundError('Card not found'));
     }
   }).catch((err) => {
     if (err.name === 'CastError') {
-      next(BadRequestError('Невалидный id'));
+      next(new BadRequestError('Невалидный id'));
     } else {
       next(err);
     }
@@ -61,12 +61,12 @@ function likeCard(req, res, next) {
     if (card) {
       res.send({ card });
     } else {
-      next(NotFoundError('Card not found'));
+      next(new NotFoundError('Card not found'));
     }
   })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(BadRequestError('Невалидный id'));
+        next(new BadRequestError('Невалидный id'));
       } else {
         next(err);
       }
@@ -82,12 +82,12 @@ function dislikeCard(req, res, next) { //  — убрать лайк с карт
     if (card) {
       res.send({ card });
     } else {
-      next(NotFoundError('Card not found'));
+      next(new NotFoundError('Card not found'));
     }
   })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(BadRequestError('Невалидный id'));
+        next(new BadRequestError('Невалидный id'));
       } else {
         next(err);
       }

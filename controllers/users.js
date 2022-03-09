@@ -13,7 +13,7 @@ function createUser(req, res, next) {
   } = req.body;
 
   if (!validator.isEmail(email)) {
-    next(BadRequestError('Wrong email validation'));
+    next(new BadRequestError('Wrong email validation'));
     return;
   }
 
@@ -26,12 +26,12 @@ function createUser(req, res, next) {
         return Promise.resolve();
       })
       .catch((err) => {
-        if (err.name === 'MongoError' && err.code === 11000) {
-          next(ConflictRequestError('Email уже существует'));
+        if (err.name === 'MongoServerError' && err.code === 11000) {
+          next(new ConflictRequestError('Email уже существует'));
           return;
         }
         if (err.name === 'ValidationError') {
-          next(BadRequestError('Некорректные данные'));
+          next(new BadRequestError('Некорректные данные'));
         } else {
           next(err);
         }
@@ -67,7 +67,7 @@ function login(req, res, next) {
       return Promise.resolve();
     })
     .catch((err) => {
-      next(UnauthorizedRequestError(err.message));
+      next(new UnauthorizedRequestError(err.message));
     });
 }
 
@@ -83,12 +83,13 @@ function getUserById(req, res, next) {
       if (user) {
         res.send({ user });
       } else {
-        next(NotFoundError('User not found'));
+        next(new NotFoundError('User not found'));
       }
+      return Promise.resolve();
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(BadRequestError('Невалидный id'));
+        next(new BadRequestError('Невалидный id'));
       } else {
         next(err);
       }
@@ -96,18 +97,17 @@ function getUserById(req, res, next) {
 }
 
 function getMe(req, res, next) {
-  console.log(req.user);
   User.findById(req.user._id)
     .then((user) => {
       if (user) {
         res.send({ user });
       } else {
-        next(NotFoundError('User not found'));
+        next(new NotFoundError('User not found'));
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(BadRequestError('Невалидный id'));
+        next(new BadRequestError('Невалидный id'));
       } else {
         next(err);
       }
@@ -123,7 +123,7 @@ function updateAvatar(req, res, next) {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(BadRequestError('Некорректные данные'));
+        next(new BadRequestError('Некорректные данные'));
       } else {
         next(err);
       }
@@ -139,7 +139,7 @@ function updateUser(req, res, next) {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(BadRequestError('Некорректные данные'));
+        next(new BadRequestError('Некорректные данные'));
       } else {
         next(err);
       }
