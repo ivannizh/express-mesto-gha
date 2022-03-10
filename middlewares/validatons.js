@@ -7,23 +7,13 @@ const bodyValidation = {
     'string.min': 'Минимальная длина поля "name" - 2',
     'string.max': 'Максимальная длина поля "name" - 30',
   }),
-  link: Joi.string().custom((value, helpers) => {
-    if (validator.isURL(value)) {
-      return value;
-    }
-    return helpers.message('Невалидный link url');
-  }),
+  link: Joi.string(),
 
   about: Joi.string().min(2).max(30).messages({
     'string.min': 'Минимальная длина поля "about" - 2',
     'string.max': 'Максимальная длина поля "about" - 30',
   }),
-  avatar: Joi.string().custom((value, helpers) => {
-    if (validator.isURL(value)) {
-      return value;
-    }
-    return helpers.message('Невалидный avatar url');
-  }),
+  avatar: Joi.string(),
   email: Joi.string().required().custom((value, helpers) => {
     if (validator.isEmail(value)) {
       return value;
@@ -98,23 +88,6 @@ const cardIdInParamsData = celebrate({
     cardId: paramsValidation.cardId,
   }),
 });
-
-// const createUserData = celebrate({
-//   params: Joi.object().keys({
-//     //валидаторы параметров адреса
-//     // в нашем случае это только id
-//   }),
-//
-//   body: Joi.object().keys({
-//     //валидаторы данных передаваемых в body
-//   }),
-//
-//   headers: Joi.object().keys({
-//     //валидатор заголовка, требуется проверять только
-//     //наличие заголовка authorization, в запросов которые требуют авторизации
-//   }).unknown(),
-// });
-//
 
 module.exports = {
   createUserData,

@@ -20,7 +20,7 @@ function createCard(req, res, next) {
     res.send(card);
   }).catch((err) => {
     if (err.name === 'ValidationError') {
-      next(new BadRequestError('Некорректные данные'));
+      next(new BadRequestError(`Некорректные данные ${err}`));
     } else {
       next(err);
     }
@@ -76,7 +76,7 @@ function likeCard(req, res, next) {
 function dislikeCard(req, res, next) { //  — убрать лайк с карточки
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { pull: { likes: req.user._id } },
+    { $pull: { likes: req.user._id } },
     { new: true },
   ).then((card) => {
     if (card) {

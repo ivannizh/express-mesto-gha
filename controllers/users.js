@@ -21,8 +21,16 @@ function createUser(req, res, next) {
     User.create({
       name, about, avatar, email, password: hash,
     })
-      .then((user) => {
-        res.status(200).send(user);
+      .then(({ _id }) => {
+        User.findById(_id)
+          .then((user) => {
+            if (!user) {
+              return Promise.reject(new Error('Internal error'));
+            }
+            res.send(user);
+            return Promise.resolve();
+          })
+          .catch((err) => Promise.reject(err));
         return Promise.resolve();
       })
       .catch((err) => {
@@ -31,7 +39,7 @@ function createUser(req, res, next) {
           return;
         }
         if (err.name === 'ValidationError') {
-          next(new BadRequestError('Некорректные данные'));
+          next(new BadRequestError(`Некорректные данные ${err}`));
         } else {
           next(err);
         }
@@ -123,7 +131,7 @@ function updateAvatar(req, res, next) {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Некорректные данные'));
+        next(new BadRequestError(`Некорректные данные ${err}`));
       } else {
         next(err);
       }

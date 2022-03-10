@@ -13,19 +13,16 @@ const {
   loginData,
 } = require('./middlewares/validatons');
 
+const NotFoundError = require('./errors/not-found-error');
+
 const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
-});
-
-const logger = (req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
-};
+}, () => {});
 
 const app = express();
-app.use(logger);
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,14 +35,11 @@ app.use(auth);
 app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
+app.use((req, res, next) => {
+  next(new NotFoundError('Not found'));
+});
+
 app.use(errors());
 app.use(errorHandler);
 
-app.use((req, res) => {
-  res.status(404);
-  res.json({ message: 'Not found' });
-});
-
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT, () => {});
