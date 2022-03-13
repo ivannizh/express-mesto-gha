@@ -20,7 +20,8 @@ export class Api {
                 method: 'GET',
                 headers: {
                     'Authorization': this._token,
-                }
+                },
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -39,7 +40,8 @@ export class Api {
                         name: name,
                         about: about,
                     }
-                )
+                ),
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -58,7 +60,8 @@ export class Api {
                         name: name,
                         link: link,
                     }
-                )
+                ),
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -76,6 +79,7 @@ export class Api {
                     'Authorization': this._token,
                     'Content-type': 'application/json',
                 },
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -89,6 +93,7 @@ export class Api {
                     'Authorization': this._token,
                     'Content-type': 'application/json',
                 },
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -101,6 +106,7 @@ export class Api {
                 headers: {
                     'Authorization': this._token,
                 },
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -118,7 +124,8 @@ export class Api {
                     {
                         avatar: newURL,
                     }
-                )
+                ),
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -129,7 +136,7 @@ export class Api {
             {
                 method: 'POST',
                 headers: {'Content-type': 'application/json',},
-                body: JSON.stringify({password, email})
+                body: JSON.stringify({password, email}),
             })
             .then(this._getResponseData)
     }
@@ -154,7 +161,8 @@ export class Api {
                     'Content-type': 'application/json'
                     // ,
                     // "Authorization": `Bearer ${jwt}`
-                }
+                },
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
