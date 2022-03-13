@@ -72,7 +72,7 @@ function login(req, res, next) {
         secure: true,
         httpOnly: true,
         sameSite: 'lax',
-        domain: 'ivannizh.nomoredomains.work',
+        domain: 'api.ivannizh.nomoredomains.work',
       });
       res.status(200).send({ message: 'success' });
       return Promise.resolve();
