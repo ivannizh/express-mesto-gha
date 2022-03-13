@@ -137,6 +137,7 @@ export class Api {
                 method: 'POST',
                 headers: {'Content-type': 'application/json',},
                 body: JSON.stringify({password, email}),
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
@@ -147,7 +148,8 @@ export class Api {
             {
                 method: 'POST',
                 headers: {'Content-type': 'application/json',},
-                body: JSON.stringify({password, email})
+                body: JSON.stringify({password, email}),
+                credentials: 'include',
             })
             .then(this._getResponseData)
     }
