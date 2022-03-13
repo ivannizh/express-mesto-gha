@@ -18,11 +18,25 @@ const NotFoundError = require('./errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
 
+const allowedCors = [
+  'https://ivannizh.nomoredomains.work',
+  'http://ivannizh.nomoredomains.work',
+  'localhost:3000',
+];
+
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 }, () => {});
 
 const app = express();
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
