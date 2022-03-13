@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
@@ -19,10 +18,10 @@ const NotFoundError = require('./errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
 
-const allowedCors = [
-  'https://ivannizh.nomoredomains.work',
-  'http://localhost:3000',
-];
+// const allowedCors = [
+//   'https://ivannizh.nomoredomains.work',
+//   'http://localhost:3000',
+// ];
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -31,37 +30,36 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 const app = express();
 
 const corsOptions = {
-  origin: true,
+  origin: 'https://ivannizh.nomoredomains.work',
   credentials: true,
 };
 
 app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  const { method } = req;
-
-  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-  const requestHeaders = req.headers['access-control-request-headers'];
-
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-
-  if (method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    res.header('Access-Control-Allow-Credentials', 'true');
-
-    return res.end();
-  }
-
-  next();
-});
+// app.use((req, res, next) => {
+//   const { origin } = req.headers;
+//   const { method } = req;
+//
+//   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+//   const requestHeaders = req.headers['access-control-request-headers'];
+//
+//   if (allowedCors.includes(origin)) {
+//     res.header('Access-Control-Allow-Origin', origin);
+//   }
+//
+//   if (method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+//     res.header('Access-Control-Allow-Headers', requestHeaders);
+//     res.header('Access-Control-Allow-Credentials', 'true');
+//
+//     return res.end();
+//   }
+//
+//   next();
+// });
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(requestLogger);
 
