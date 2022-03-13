@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const routerCard = require('./routes/cards');
 const routerUser = require('./routes/users');
@@ -28,6 +29,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 }, () => {});
 
 const app = express();
+
+const corsOptions = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
