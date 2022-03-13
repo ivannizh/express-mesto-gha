@@ -69,7 +69,7 @@ function login(req, res, next) {
       );
       res.cookie('jwt', token, {
         maxAge: 3600000,
-        httpOnly: true,
+        secure: true,
         domain: 'api.ivannizh.nomoredomains.work',
       });
       res.status(200).send({ message: 'success' });
