@@ -71,7 +71,7 @@ function login(req, res, next) {
         maxAge: 3600000,
         httpOnly: true,
         secure: true,
-        // sameSite: 'none',
+        sameSite: 'none',
         domain: '.ivannizh.nomoredomains.work',
       });
       res.status(200).send({ message: 'success' });
