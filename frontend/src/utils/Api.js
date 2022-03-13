@@ -11,17 +11,7 @@ export class Api {
         return res.json();
     }
 
-    getUserInfo() {
-        return fetch(
-            `${this._url}/users/me`,
-            {
-                method: 'GET',
-                headers: {
-                    'Authorization': this._token,
-                }
-            })
-            .then(this._getResponseData)
-    }
+
 
     getCards() {
         return fetch(
@@ -132,11 +122,47 @@ export class Api {
             })
             .then(this._getResponseData)
     }
+
+    signup({email, password}) {
+        return fetch(
+            `${this._url}/signup`,
+            {
+                method: 'POST',
+                headers: {'Content-type': 'application/json',},
+                body: JSON.stringify({password, email})
+            })
+            .then(this._getResponseData)
+    }
+
+    signin({email, password}) {
+        return fetch(
+            `${this._url}/signin`,
+            {
+                method: 'POST',
+                headers: {'Content-type': 'application/json',},
+                body: JSON.stringify({password, email})
+            })
+            .then(this._getResponseData)
+    }
+
+    getUserInfo() {
+        return fetch(
+            `${this._url}/users/me`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json'
+                    // ,
+                    // "Authorization": `Bearer ${jwt}`
+                }
+            })
+            .then(this._getResponseData)
+    }
+
 }
 
 const api = new Api(
-    'https://mesto.nomoreparties.co/v1/cohort-30',
-    '8a0021df-e451-4ea1-9a4d-dab486c52595'
+    'https://api.ivannizh.nomoredomains.work'
 )
 
 export default api

@@ -13,7 +13,7 @@ import Register from "./Register";
 import Login from "./Login";
 import RequireAuth from "./RequireAuth";
 import InfoTooltip from "./InfoTooltip";
-import auth from "../utils/Auth";
+
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false)
@@ -30,17 +30,17 @@ function App() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    function handleLogin(token) {
+    function handleLogin() {
         setLoggedIn(true);
 
-        localStorage.setItem('jwt', token);
+        // localStorage.setItem('jwt', token);
         navigate('/');
     }
 
     function handleLogout() {
         setLoggedIn(false);
 
-        localStorage.removeItem('jwt');
+        // localStorage.removeItem('jwt');
         navigate('/sign-in');
     }
 
@@ -63,9 +63,7 @@ function App() {
     }
 
     function handleTokenCheck(path) {
-        const jwt = localStorage.getItem('jwt')
-        if (jwt) {
-            auth.getInfo(jwt)
+            api.getUserInfo()
                 .then((res) => {
                         setUserEmail(res.data.email);
                         setLoggedIn(true);
@@ -75,14 +73,13 @@ function App() {
                 .catch((err) => {
                     console.log(err)
                 });
-        }
     }
 
     useEffect(() => {
+        if (!loggedIn) {
+            return
+        }
         handleTokenCheck(location.pathname);
-    }, [])
-
-    useEffect(() => {
         api.getCards()
             .then(
                 (data) => {
@@ -90,7 +87,15 @@ function App() {
                 }
             )
             .catch(err => console.log(err))
-    }, [])
+
+        api.getUserInfo()
+            .then(
+                (userInfo) => {
+                    setCurrentUser(userInfo);
+                }
+            )
+            .catch(err => console.log(err))
+    }, [loggedIn])
 
 
     function closeAllPopups() {
@@ -145,20 +150,10 @@ function App() {
         ).catch(err => console.log(err))
     }
 
-    useEffect(() => {
-        api.getUserInfo()
-            .then(
-                (userInfo) => {
-                    setCurrentUser(userInfo);
-                }
-            )
-            .catch(err => console.log(err))
-    }, [])
-
     function handleSubmitRegister(data) {
-        auth.signup(data)
+        api.signup(data)
             .then((resp) => {
-                handleEmailChange(resp.data.email);
+                handleEmailChange(resp.email);
                 setIsInfoTooltipFail(false);
                 handleInfoTooltipOpen();
             })
@@ -170,11 +165,11 @@ function App() {
     }
 
     function handleSubmitLogin(data) {
-        auth.signin(data)
+        api.signin(data)
             .then((resp) => {
-                if (resp.token) {
-                    handleLogin(resp.token);
-                }
+                // if (resp.token) {
+                    handleLogin();
+                // }
             })
             .catch((err) => {
                 console.log(err);
