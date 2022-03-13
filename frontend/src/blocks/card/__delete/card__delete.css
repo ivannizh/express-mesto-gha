@@ -1,0 +1,20 @@
+.card__delete {
+    display: none;
+    position: absolute;
+    right: 15px;
+    top: 18px;
+    height: 19px;
+    width: 18px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("../../../images/trash.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    transition-property: opacity;
+    transition-duration: 0.5s;
+}
+
+.card__delete:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}

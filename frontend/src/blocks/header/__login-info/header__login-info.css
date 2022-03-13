@@ -1,0 +1,15 @@
+.header__login-info {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+
+    text-align: right;
+
+    color: #FFFFFF;
+
+    display: inline;
+
+    text-decoration: none;
+}

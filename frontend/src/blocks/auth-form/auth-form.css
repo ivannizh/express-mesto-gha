@@ -1,0 +1,9 @@
+@import url(__caption/auth-form__caption.css);
+@import url(__input/auth-form__input.css);
+@import url(__form/auth-form__form.css);
+@import url(__button/auth-form__button.css);
+@import url(__login-line/auth-form__login-line.css);
+
+.auth-form{
+
+}

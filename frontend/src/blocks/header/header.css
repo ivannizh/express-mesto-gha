@@ -1,0 +1,26 @@
+@import url(__login-info/header__login-info.css);
+@import url(__exit/header__exit.css);
+
+.header {
+    min-height: 74px;
+    border-bottom: 1px solid rgba(84, 84, 84, .7);
+    max-width: 880px;
+    margin: 45px auto 40px;
+
+    position: relative;
+}
+
+@media screen and (max-width: 980px) {
+    .header {
+        margin-right: 60px;
+        margin-left: 60px;
+    }
+}
+
+@media screen and (max-width: 402px) {
+    .header {
+        min-height: 56px;
+        max-width: 100%;
+        margin: 28px 0 40px;
+    }
+}

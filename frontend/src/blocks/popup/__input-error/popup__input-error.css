@@ -1,0 +1,14 @@
+.popup__input-error {
+    font-family: Inter, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+    opacity: 0;
+    height: 15px;
+    margin-bottom: 10px;
+    display: inline-block;
+    transition-property: opacity;
+    transition-duration: 0.5s;
+}

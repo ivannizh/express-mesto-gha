@@ -12,6 +12,7 @@ const {
   createUserData,
   loginData,
 } = require('./middlewares/validatons');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const NotFoundError = require('./errors/not-found-error');
 
@@ -27,6 +28,8 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(requestLogger);
+
 app.post('/signin', loginData, login);
 app.post('/signup', createUserData, createUser);
 
@@ -38,6 +41,8 @@ app.use('/cards', routerCard);
 app.use((req, res, next) => {
   next(new NotFoundError('Not found'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 app.use(errorHandler);
