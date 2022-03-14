@@ -39,9 +39,8 @@ function App() {
 
     function handleLogout() {
         setLoggedIn(false);
-
+        api.signout().then(() => {navigate('/sign-in')}).catch(err => console.log(err));
         // localStorage.removeItem('jwt');
-        navigate('/sign-in');
     }
 
     function handleEmailChange(newEmail) {
@@ -49,10 +48,10 @@ function App() {
     }
 
     function handleCardLike(card) {
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        const isLiked = card.likes.some(i => i === currentUser._id);
 
         api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            setCards((state) => state.map((c) => c._id === card._id ? newCard.card : c));
         }).catch(err => console.log(err));
     }
 
@@ -65,7 +64,7 @@ function App() {
     function handleTokenCheck(path) {
             api.getUserInfo()
                 .then((res) => {
-                        setUserEmail(res.email);
+                        setUserEmail(res.user.email);
                         setLoggedIn(true);
                         navigate(path);
                     }
@@ -76,10 +75,13 @@ function App() {
     }
 
     useEffect(() => {
+        handleTokenCheck(location.pathname);
+    }, [])
+
+    useEffect(() => {
         if (!loggedIn) {
             return
         }
-        handleTokenCheck(location.pathname);
         api.getCards()
             .then(
                 (data) => {
@@ -92,7 +94,7 @@ function App() {
         api.getUserInfo()
             .then(
                 (userInfo) => {
-                    setCurrentUser(userInfo);
+                    setCurrentUser(userInfo.user);
                 }
             )
             .catch(err => console.log(err))
@@ -130,14 +132,14 @@ function App() {
 
     function handleUpdateUser(info) {
         api.updateUserInfo(info).then((userInfo) => {
-            setCurrentUser(userInfo);
+            setCurrentUser(userInfo.data);
             closeAllPopups();
         }).catch(err => console.log(err))
     }
 
     function handleUpdateAvatar(url) {
         api.updateAvatar(url).then((userInfo) => {
-            setCurrentUser(userInfo);
+            setCurrentUser(userInfo.data);
             closeAllPopups();
         }).catch(err => console.log(err))
     }
@@ -167,7 +169,7 @@ function App() {
 
     function handleSubmitLogin(data) {
         api.signin(data)
-            .then((resp) => {
+            .then(() => {
                 // if (resp.token) {
                     handleLogin();
                 // }

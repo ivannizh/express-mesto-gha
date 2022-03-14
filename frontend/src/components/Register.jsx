@@ -23,9 +23,9 @@ export default function Register({handleSubmit}) {
             <div>
                 <h2 className='auth-form__caption'>Регистрация</h2>
                 <input className="auth-form__input" id="user-email-input" name="email" placeholder="Email" required
-                       type="email" onChange={onChange} value={formInputs.email}/>
+                       type="email" onChange={onChange} autoComplete='email' value={formInputs.email}/>
                 <input className="auth-form__input" id="user-password-input" name="password" placeholder="Пароль"
-                       required type="password" onChange={onChange} value={formInputs.password}/>
+                       required type="password" onChange={onChange} autoComplete='new-password' value={formInputs.password}/>
             </div>
             <div>
                 <button className='auth-form__button' type='submit'>Зарегистрироваться</button>

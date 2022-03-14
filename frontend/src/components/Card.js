@@ -3,8 +3,9 @@ import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
 function Card({_id, link, name, likes, owner, onCardClick, onCardLike,onCardDelete}) {
     const currentUser = React.useContext(CurrentUserContext);
-    const isOwn = (owner._id === currentUser._id);
-    const cardLikeClasses = `card__like ${likes.some((like) => like._id === currentUser._id) && 'card__like_active'}`
+    const isOwn = (owner === currentUser._id);
+    const cardLikeClasses = `card__like ${likes.some((like) => like === currentUser._id) && 'card__like_active'}`
+
 
     function onClick() {
         onCardClick({
