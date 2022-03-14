@@ -65,7 +65,7 @@ function App() {
     function handleTokenCheck(path) {
             api.getUserInfo()
                 .then((res) => {
-                        setUserEmail(res.data.email);
+                        setUserEmail(res.email);
                         setLoggedIn(true);
                         navigate(path);
                     }
@@ -83,7 +83,8 @@ function App() {
         api.getCards()
             .then(
                 (data) => {
-                    setCards(data);
+                    console.log(data);
+                    setCards(data.data);
                 }
             )
             .catch(err => console.log(err))

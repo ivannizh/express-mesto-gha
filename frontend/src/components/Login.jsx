@@ -13,20 +13,21 @@ export default function Login({email, handleSubmitLogin}) {
         })
     }
 
-    useEffect(() => {
-        if (email !== '') {
-            setFormInputs((prevState) => ({
-                ...prevState,
-                email
-            }))
-        }
-    }, [email]);
+    // useEffect(() => {
+    //     if (email !== '') {
+    //         setFormInputs((prevState) => ({
+    //             ...prevState,
+    //             email
+    //         }))
+    //     }
+    // }, []);
 
     const onSubmit = (e) => {
         e.preventDefault();
 
         handleSubmitLogin(formInputs);
     }
+
     return (
         <form className='auth-form__form' onSubmit={onSubmit}>
             <div>
