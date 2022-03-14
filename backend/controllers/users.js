@@ -56,11 +56,7 @@ function createUser(req, res, next) {
 }
 
 function logout(req, res, next) {
-  res.clearCookie(JWT_KEY, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-  });
+  res.clearCookie(JWT_KEY,JWT_OPTIONS);
   res.end()
 }
 
