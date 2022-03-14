@@ -7,6 +7,14 @@ const NotFoundError = require('../errors/not-found-error');
 const ConflictRequestError = require('../errors/conflict-request-error');
 const UnauthorizedRequestError = require('../errors/unauthorized-request-error');
 
+const JWT_KEY = 'jwt'
+const JWT_OPTIONS =  {
+  maxAge: 3600000,
+  httpOnly: true,
+  secure: true,
+  sameSite: 'none',
+  domain: '.ivannizh.nomoredomains.work',
+}
 function createUser(req, res, next) {
   const {
     name, about, avatar, email, password,
@@ -48,12 +56,7 @@ function createUser(req, res, next) {
 }
 
 function logout(req, res, next) {
-  res.clearCookie("jwt",{
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    domain: '.ivannizh.nomoredomains.work',
-  });
+  res.clearCookie(JWT_KEY,JWT_OPTIONS);
   res.end()
 }
 
@@ -77,13 +80,7 @@ function login(req, res, next) {
         'some-secret-key',
         { expiresIn: '7d' },
       );
-      res.cookie('jwt', token, {
-        maxAge: 3600000,
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        domain: '.ivannizh.nomoredomains.work',
-      });
+      res.cookie(JWT_KEY, token, JWT_OPTIONS);
       res.status(200).send({ message: 'success' });
       return Promise.resolve();
     })
