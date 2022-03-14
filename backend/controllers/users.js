@@ -47,6 +47,11 @@ function createUser(req, res, next) {
   });
 }
 
+function logout(req, res, next) {
+  res.clearCookie("jwt");
+  res.end()
+}
+
 function login(req, res, next) {
   const { email, password } = req.body;
 
