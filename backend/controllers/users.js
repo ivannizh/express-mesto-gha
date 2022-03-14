@@ -48,7 +48,12 @@ function createUser(req, res, next) {
 }
 
 function logout(req, res, next) {
-  res.clearCookie("jwt");
+  res.clearCookie("jwt",{
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+    domain: '.ivannizh.nomoredomains.work',
+  });
   res.end()
 }
 
