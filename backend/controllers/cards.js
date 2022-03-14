@@ -4,7 +4,7 @@ const NotFoundError = require('../errors/not-found-error');
 const ForbiddenError = require('../errors/forbidden-error');
 
 function getCards(req, res, next) {
-  Card.find({}).sort({ createdAt: 'desc' }).then(
+  Card.find({}).sort({ createdAt: 'asc' }).then(
     (cards) => {
       res.send({ data: cards });
     },
