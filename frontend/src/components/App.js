@@ -85,7 +85,6 @@ function App() {
         api.getCards()
             .then(
                 (data) => {
-                    console.log(data);
                     setCards(data.data);
                 }
             )
