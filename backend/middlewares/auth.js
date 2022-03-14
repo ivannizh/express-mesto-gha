@@ -11,7 +11,10 @@ function auth(req, res, next) {
 
   let payload;
   try {
-    payload = jwt.verify(authorization, 'some-secret-key');
+    payload = jwt.verify(
+      authorization,
+      process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'some-secret-key',
+    );
   } catch (err) {
     if (err.name === 'JsonWebTokenError') {
       next(new UnauthorizedRequestError('Необходима авторизация'));
